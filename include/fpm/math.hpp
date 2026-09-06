@@ -601,13 +601,14 @@ constexpr void sincos(fixed<B, I, F, R> x, fixed<B, I, F, R>& out_sin, fixed<B, 
 template <typename B, typename I, unsigned int F, bool R>
 constexpr inline fixed<B, I, F, R> tan(fixed<B, I, F, R> x) noexcept
 {
-    auto cx = cos(x);
+    fixed<B, I, F, R> s, c;
+    sincos(x, s, c);
 
     // Tangent goes to infinity at 90 and -90 degrees.
     // We can't represent that with fixed-point maths.
-    assert(abs(cx).raw_value() > 1);
+    assert(abs(c).raw_value() > 1);
 
-    return sin(x) / cx;
+    return s / c;
 }
 
 namespace detail {
